@@ -1,7 +1,6 @@
 # Python Modules
 from flask import Flask, redirect, url_for, request, render_template
 import jinja2
-import datetime
 
 # Google Modules
 from google.appengine.api import users
@@ -50,17 +49,14 @@ def landing_page():
 @app.route('/user/<nickname>', methods=['GET'])
 def user_summary_page(nickname):
 	user = users.get_current_user()
-	date = datetime.date.today()
 
 	if user:
 		login_logout_url = users.create_logout_url('/')
 
 		# binding condition: if current user is requesting their page allow; else redirect
 		if nickname == user.nickname():
-			# narrow results to current user
-			ancestor_path = ndb.Key("Employee", nickname)
 			# query the datastore
-			opp_query = Opportunity.query( ancestor_path ) # ancestor=guestbook_key()
+			opp_query = Opportunity.query( ancestor=create_opportunity_key(nickname))
 			opps_to_render = opp_query.fetch(limit=10)
 			# supply to frontend
 			return render_template('user_summary_page.html', nickname=nickname, login_logout_url=login_logout_url, opps_to_render=opps_to_render)
@@ -81,7 +77,6 @@ def user_summary_page(nickname):
 @app.route('/<nickname>/add_opportunity', methods=['GET','POST'])
 def add_opportunity(nickname):
 	user = users.get_current_user()
-	date = datetime.date.today()
 
 	if user:
 		login_logout_url = users.create_logout_url('/')
@@ -107,7 +102,7 @@ def add_opportunity(nickname):
 				del payload
 
 				# redirect back to user page
-				return redirect(url_for('user_summary_page'))
+				return redirect(url_for('user_summary_page', nickname=nickname))
 		else:
 			#flash('You cannot enter an opportunity for another user.')
 			return redirect(url_for('user_summary_page', nickname=nickname))
@@ -124,8 +119,8 @@ def edit_opportunity(nickname, opp_id):
 
 		if nickname == user.nickname():
 			if request.method == 'GET':
-				# query the data
-				opp = Opportunity.query(opp_id)
+				# query datastore using  key and parent - get_by_id fails without parents specified
+				opp=Opportunity.get_by_id(int(opp_id), parent=create_opportunity_key(nickname=nickname))
 				return render_template('edit_opportunity.html', nickname=nickname, login_logout_url=login_logout_url, opp=opp)
 			else:
 				# generate payload

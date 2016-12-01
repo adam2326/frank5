@@ -45,7 +45,7 @@
 	{% for opp in opps_to_render %}
 		<tr>
 			<td>
-				<form action="{{url_for('edit_opportunity', opp_id = opp.id, nickname=nickname) }}" >
+				<form action="{{url_for('edit_opportunity', opp_id = opp.key.id(),  nickname=nickname) }}" >
 				<input type="submit" name="edit_opportunity" value="Edit">
 				</form>
 			</td>

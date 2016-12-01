@@ -60,12 +60,20 @@ def create_opportunity(nickname, company_name, opp_start_date, unit_name, num_un
 	opportunity.put()
 
 
+# create edit key
+def create_edit_key(nickname, opp_id):
+	return ndb.Key('Employee', nickname, 'Opportunity', opp_id)
+
+def get_edit_key(opp_id):
+	return ndb.Key('Opportunity', opp_id)
+
+
 # edit an opportunity
 def edit_opportunity(opp_id, nickname, company_name, opp_start_date, unit_name, num_units, existing_customer, notes):
 	# get the key
-	opp_key = ndb.Key('Opportunity', opp_id)
+	#opp_key = ndb.Key('Opportunity', opp_id)
 	# get the entry from the datastore
-	opportunity = opp_key.get()
+	opportunity = Opportunity.get_by_id(int(opp_id), parent=create_opportunity_key(nickname=nickname))
 	# alter the parameters
 	opportunity.company_name = company_name
 	opportunity.opp_start_date = opp_start_date

@@ -14,11 +14,11 @@
 <body>
 
 <div class="container">
-<form class="form-horizontal" action="{{ url_for('edit_opportunity', nickname=nickname, opp_id = opp.id) }}" method="post">
+<form class="form-horizontal" action="{{ url_for('edit_opportunity', nickname=nickname, opp_id= opp.key.urlsafe()) }}" method="post">
 <fieldset>
 
 <!-- Form Name -->
-<legend>Edit Opportunity</legend>
+<legend>Edit Opportunity {{ opp }}</legend>
 
 <!-- STARTING DATE-->
 <div class="form-group">
