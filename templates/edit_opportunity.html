@@ -14,17 +14,17 @@
 <body>
 
 <div class="container">
-<form class="form-horizontal" action="{{ url_for('edit_opportunity', nickname=nickname, opp_id= opp.key.urlsafe()) }}" method="post">
+<form class="form-horizontal" action="{{ url_for('edit_opportunity', nickname=nickname, opp_id= opp.key.id()) }}" method="post">
 <fieldset>
 
 <!-- Form Name -->
-<legend>Edit Opportunity {{ opp }}</legend>
+<legend>Edit Opportunity</legend>
 
 <!-- STARTING DATE-->
 <div class="form-group">
   <label class="col-md-4 control-label" for="start_date">Opportunity Starting Date</label>  
   <div class="col-md-4">
-  <input id="start_date" name="inp_start_date" type="text" placeholder="{{ opp.opp_start_date }}" class="form-control input-md" required="">
+  <input id="start_date" name="inp_start_date" type="text" value="{{ opp.opp_start_date }}" class="form-control input-md">
   </div>
 </div>
 
@@ -32,7 +32,7 @@
 <div class="form-group">
   <label class="col-md-4 control-label" for="company_name">Company Name</label>  
   <div class="col-md-4">
-  <input id="company_name" name="inp_company_name" type="text" placeholder="{{ opp.company_name }}" class="form-control input-md" required=""> 
+  <input id="company_name" name="inp_company_name" type="text" value="{{ opp.company_name }}" class="form-control input-md"> 
   </div>
 </div>
 
@@ -103,7 +103,7 @@
 <div class="form-group">
   <label class="col-md-4 control-label" for="num_units">Number of Units</label>  
   <div class="col-md-4">
-  <input id="num_units" name="inp_num_units" type="text" placeholder="{{ opp.num_units }}" class="form-control input-md" required=""> 
+  <input id="num_units" name="inp_num_units" type="text" value="{{ opp.num_units }}" class="form-control input-md" > 
   </div>
 </div>
 

@@ -48,8 +48,11 @@ def create_opportunity_key(nickname):
     return ndb.Key('Employee', nickname)
 
 # create an opportunity
-def create_opportunity(nickname, company_name, opp_start_date, unit_name, num_units, existing_customer, notes):
-	opportunity = Opportunity(parent = create_opportunity_key(nickname))
+def create_opportunity(nickname, opp_id, httpmeth, company_name, opp_start_date, unit_name, num_units, existing_customer, notes):
+	if httpmeth == 'get':
+		opportunity = Opportunity(parent = create_opportunity_key(nickname))
+	else:
+		opportunity = Opportunity.get_by_id(int(opp_id), parent=create_opportunity_key(nickname=nickname))
 	# Cloud Datastore assign a numeric ID automatically since the keyword is omitted, omit the key_name argument:
 	opportunity.company_name = company_name
 	opportunity.opp_start_date = opp_start_date
@@ -58,29 +61,3 @@ def create_opportunity(nickname, company_name, opp_start_date, unit_name, num_un
 	opportunity.existing_customer = existing_customer
 	opportunity.notes = notes
 	opportunity.put()
-
-
-# create edit key
-def create_edit_key(nickname, opp_id):
-	return ndb.Key('Employee', nickname, 'Opportunity', opp_id)
-
-def get_edit_key(opp_id):
-	return ndb.Key('Opportunity', opp_id)
-
-
-# edit an opportunity
-def edit_opportunity(opp_id, nickname, company_name, opp_start_date, unit_name, num_units, existing_customer, notes):
-	# get the key
-	#opp_key = ndb.Key('Opportunity', opp_id)
-	# get the entry from the datastore
-	opportunity = Opportunity.get_by_id(int(opp_id), parent=create_opportunity_key(nickname=nickname))
-	# alter the parameters
-	opportunity.company_name = company_name
-	opportunity.opp_start_date = opp_start_date
-	opportunity.unit_name = unit_name
-	opportunity.num_units = num_units
-	opportunity.existing_customer = existing_customer
-	opportunity.notes = notes
-	# save edits back to datastore
-	opportunity.put()
-

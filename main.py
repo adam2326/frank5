@@ -98,7 +98,7 @@ def add_opportunity(nickname):
 				payload['notes'] = request.form['inp_ae_notes']
 
 				# write data to database
-				create_opportunity(**payload)
+				create_opportunity(httpmeth='get', opp_id=None,  **payload)
 				del payload
 
 				# redirect back to user page
@@ -132,9 +132,9 @@ def edit_opportunity(nickname, opp_id):
 				payload['num_units'] = int(request.form['inp_num_units'])
 				payload['existing_customer'] = request.form['inp_existing_customer']
 				payload['notes'] = request.form['inp_ae_notes']
-
+				
 				# write data to database
-				edit_opportunity(**payload)
+				create_opportunity(httpmeth='post', opp_id=int(opp_id),**payload)
 				del payload
 
 				# redirect back to user page
